@@ -52,7 +52,8 @@ public class SalaryCalculator extends JFrame implements ActionListener {
             mAbout;
     JTextField tBrutto;
     JCheckBox ChYesNo;
-    BigDecimal brutto, netto, E, R, C, PNFZ, Z, ZP, Po, Zal, ZalPom, KW, KUP;
+    BigDecimal brutto, netto, E, R, C, PNFZ, Z, ZP, Po, Zal, ZalPom, z1, KW, KUP;
+    double z2, z3, z4, z5;
 
     public SalaryCalculator() {
         setSize(500, 550);
@@ -187,7 +188,7 @@ public class SalaryCalculator extends JFrame implements ActionListener {
         linformation1 = new JLabel("Wskazówka: Możesz zapisać otrzymane wyniki obliczeń, np. do pliku *.txt.");
         linformation1.setBounds(10, 420, 450, 20);
         add(linformation1);
-        
+
         linformation2 = new JLabel("Następnie sprawdzić zapisany plik otwierając go.");
         linformation2.setBounds(10, 440, 450, 20);
         add(linformation2);
@@ -288,6 +289,7 @@ public class SalaryCalculator extends JFrame implements ActionListener {
             KUP = new BigDecimal("135.63");
         }
         if (z == bCalculate) {
+
             try {
                 brutto = new BigDecimal(tBrutto.getText());
                 brutto = brutto.setScale(2, BigDecimal.ROUND_HALF_EVEN);
@@ -309,20 +311,47 @@ public class SalaryCalculator extends JFrame implements ActionListener {
 
                 Po = PNFZ.subtract(KUP);
                 Po = Po.setScale(0, BigDecimal.ROUND_HALF_EVEN);
+
                 Zal = Po.multiply(new BigDecimal("0.18"));
                 Zal = Zal.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
                 KW = new BigDecimal("46.335");
                 ZalPom = (Zal.subtract(ZP)).subtract(KW);
                 ZalPom = ZalPom.setScale(0, BigDecimal.ROUND_HALF_EVEN);
+                
+                /**
+                 * Obliczenia dotyczące składki zdrowotnej i zaliczki na podatek
+                 * dochodowy zgodne z art 83 ust. 1 i 2 ustawy z dn.27.08.2004
+                 * o świadczeniach opieki zdrowotnej finansowanych ze środków
+                 * publicznych, z późn. zm.
+                 *
+                 * @param z1..z5 - zmienne pomocnicze
+                 */
+                
+                z1 = Zal.subtract(KW);
+                z1 = z1.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+
+                z2 = Double.parseDouble(Z.toString());
+                z3 = Double.parseDouble(z1.toString());
+                if (z2 > z3) {
+                    Z = z1;
+                }
+                z4 = Double.parseDouble(Z.toString());
+                if (z4 < 0) {
+                    Z = new BigDecimal("0");
+                }
+                z5 = Double.parseDouble(ZalPom.toString());
+                if (z5 < 0) {
+                    ZalPom = new BigDecimal("0");
+                }
 
                 netto = (PNFZ.subtract(Z)).subtract(ZalPom);
                 netto = netto.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
                 lShowGrossSalary.setText(brutto.toString() + " PLN");
                 lShowE.setText(E.toString() + " PLN");
-                lShowR.setText(E.toString() + " PLN");
-                lShowC.setText(E.toString() + " PLN");
+                lShowR.setText(R.toString() + " PLN");
+                lShowC.setText(C.toString() + " PLN");
                 lShowZ.setText(Z.toString() + " PLN");
                 lShowZalPom.setText(ZalPom.toString() + " PLN");
                 lShowNettSalary.setText(netto.toString() + " PLN");
