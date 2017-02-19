@@ -220,7 +220,7 @@ public class SalaryCalculator extends JFrame implements ActionListener {
                     save.println("Ubezpieczenie rentowe = " + R + " PLN");
                     save.println("Ubezpieczenie chorobowe = " + C + " PLN");
                     save.println("Ubezpieczenie zdrowotne = " + Z + " PLN");
-                    save.println("Zaliczka na podatek dochodowy = " + Zal + " PLN");
+                    save.println("Zaliczka na podatek dochodowy = " + ZalPom + " PLN");
                     save.println("Wynagrodzenie netto = " + netto + " PLN");
                     save.println();
                     save.close();
